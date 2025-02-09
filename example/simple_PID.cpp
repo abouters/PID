@@ -8,7 +8,8 @@ int main() {
   PIDGain gain = {1.0, 0.5, 0.1}; // Kp, Ki, Kd の設定
   double minLimit = -10.0; // 出力の最小値
   double maxLimit = 10.0;  // 出力の最大値
-  PID pid(cycle, gain, minLimit, maxLimit);
+  PID pid(cycle, minLimit, maxLimit);
+  pid.setGain(gain);
 
   // 制御対象の初期状態
   double target = 50.0;
