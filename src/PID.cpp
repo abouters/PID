@@ -1,12 +1,11 @@
 #include <PID.h>
+#include <Arduino.h>
 
 
-PID::PID(double cycle, PIDGain gain, double min, double max)
-    : cycle(cycle), gain(gain), minLimit(min), maxLimit(max){}
+PID::PID(double cycle, double min, double max)
+    : cycle(cycle), minLimit(min), maxLimit(max){}
 
-PID::~PID()
-{
-}
+PID::~PID(){}
 
 void PID::setGain(PIDGain gain){
     this->gain = gain;
@@ -22,15 +21,16 @@ void PID::setLowPassFilterCoefficient(double coeff){
 }
 
 double PID::calculate(double error){
-	double prop = (error - pre_error) / cycle;	//偏差の1階微分値
-	double deriv = (prop - pre_prop) / cycle;	//偏差の2階微分値
+	prop = (error - pre_error) / cycle;	//偏差の1階微分値
+	deriv = (prop - pre_prop) / cycle;	//偏差の2階微分値
     low_pass_deriv_ += deriv / lowPassFilterCoefficient;
 
-    output += gain.Kp*prop + gain.Ki*error + gain.Kd*low_pass_deriv_;
-    output = std::clamp(output, minLimit, maxLimit);
+    output += gain.Kp*prop + gain.Ki*error*cycle + gain.Kd*low_pass_deriv_;
+
+    if(output > maxLimit || output < minLimit)   output -= gain.Ki*error*cycle; //アンチワインドアップ
 
     pre_error = error;
     pre_prop = prop;
 
-    return output;
+    return std::clamp(output, minLimit, maxLimit);
 }

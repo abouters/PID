@@ -11,17 +11,17 @@ typedef struct{
 
 class PID{
     private:
-        PIDGain gain = {};
-        double cycle = 0;
-        double minLimit = 0;     // 出力の最小値
-        double maxLimit = 0;     // 出力の最大値
-        double pre_error = 0;
-        double pre_prop = 0;
+        PIDGain gain = {0.0, 0.0, 0.0};
+        double cycle;
+        double minLimit, maxLimit;
+        double prop = 0, deriv = 0;
+        double pre_error = 0, pre_prop = 0;
         double low_pass_deriv_ = 0;     //ローパスフィルタ後の微分要素
         double output = 0;
         double lowPassFilterCoefficient = 8;  //ローパスフィルタの係数
     public:
-        PID(double cycle, PIDGain gain, double min, double max);
+        PID(): cycle(0), minLimit(0), maxLimit(0) {} // デフォルトコンストラクタ
+        PID(double cycle, double min, double max);
         ~PID();
         void setGain(PIDGain gain);
         void setLimit(double min, double max);
