@@ -24,6 +24,5 @@ int main() {
     // 時間を進める
     std::this_thread::sleep_for(std::chrono::milliseconds(10)); // 10ms待機
   }
-
   return 0;
 }

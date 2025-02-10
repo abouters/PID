@@ -1,6 +1,5 @@
 #include <PID.h>
-#include <Arduino.h>
-
+#include <algorithm>
 
 PID::PID(double cycle, double min, double max)
     : cycle(cycle), minLimit(min), maxLimit(max){}
@@ -32,5 +31,11 @@ double PID::calculate(double error){
     pre_error = error;
     pre_prop = prop;
 
-    return std::clamp(output, minLimit, maxLimit);
+    return clamp(output, minLimit, maxLimit);
+}
+
+double PID::clamp(double value, double min, double max){
+    if(value > max) return max;
+    if(value < min) return min;
+    return value;
 }

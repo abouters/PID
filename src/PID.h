@@ -27,7 +27,7 @@ class PID{
         void setLimit(double min, double max);
         void setLowPassFilterCoefficient(double coeff);
         double calculate(double error);
+        double clamp(double value, double min, double max);
 };
-
 
 #endif
