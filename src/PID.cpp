@@ -20,8 +20,8 @@ void PID::setLowPassFilterCoefficient(double coeff){
 }
 
 double PID::calculate(double error){
-	prop = (error - pre_error) / cycle;	//偏差の1階微分値
-	deriv = (prop - pre_prop) / cycle;	//偏差の2階微分値
+	prop = (error - pre_error);	//偏差の1階微分値
+	deriv = (prop - pre_prop);	//偏差の2階微分値
     low_pass_deriv_ += deriv / lowPassFilterCoefficient;
 
     output += gain.Kp*prop + gain.Ki*error*cycle + gain.Kd*low_pass_deriv_;
